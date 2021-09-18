@@ -1,0 +1,205 @@
+{% extends 'backend_base.html.twig' %}
+
+
+{# Page Meta title #}
+{% set title = "Gestion des coucous" %}
+{% set description = "Gestion des concours" %}
+{% set keywords = "concours, Bénin, epreuves, pdf, université, ecole, filière"%}
+
+{# Page Meta title #}
+{% block title %}
+	{{title}}
+{% endblock %}
+{% block fb_title %}
+	{{title}}
+{% endblock %}
+{% block twitter_title %}
+	{{title}}
+{% endblock %}
+
+{# Page Body class #}
+{% block body_class %}
+{% endblock %}
+
+{# Page meta informations #}
+{% block descriptions %}
+	{{description}}
+{% endblock %}
+{% block schema_description %}
+	{{description}}
+{% endblock %}
+{% block twitter_description %}
+	{{description}}
+{% endblock %}
+{% block open_graph_description %}
+	{{description}}
+{% endblock %}
+{% block keywords %}
+	{{keywords}}
+{% endblock %}
+
+{% block og_image %}
+	
+{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-lg-12 grid-margin stretch-card">
+			<div class="card">
+				<div class="card-body">
+					<h4 class="card-title">Universités</h4>
+					<p class="card-description">
+						Table des cooncours ajoutés sur le site. &nbsp;
+						<div class="template-demo">
+                            <div class="btn-group col-12" role="group" aria-label="Basic example">
+							    <div class="text-center">
+						            <a href="{{ path('app_file_new') }}" class="btn btn-info my-4"><i class="mdi mdi-keyboard-return"></i>Importer un nouveau fichier</a>
+					        </div>
+						</div>
+					</p>
+					<div class="table-responsive" >
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+									<th>ID</th>
+                                    <th>Nom</th>
+                                    <th>Fichier</th>
+                                    <th>Année</th>
+                                    <th>Université</th>
+                                    <th>Ecole</th>
+                                    <th>Domaine</th>
+                                    <th>Catégorie</th>
+                                    <th>Auteur</th>
+                                    <th>Date d'ajout</th>
+                                    <th>Actif</th>
+                                    <th>Modifier</th>
+				                    <th>Activer</th>
+				                    <th>Suppression</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for file in files %}
+                                    {% if file.isActive %}
+                                        {% set activeBadge = "badge badge-success" %}
+                                     {% else %}
+                                         {% set activeBadge = "badge badge-warning" %}
+                                     {% endif %}
+                                    <tr>
+                                        <td>{{ file.id }}</td>
+                                        <td>{{ file.FullName }}</td>
+                                        <td>
+                                             <a class="badge badge-primary" href="{{ asset("uploads/pdf/" ~ file.fileName) }}">Télécharger(PDF)</a>
+                                        </td>
+                                        <td>{{ file.AcademicYear }}</td>
+                                        <td>{{ file.university }}</td>
+                                        <td>{{ file.school }}</td>
+                                        <td>{{ file.field }}</td>
+                                        <td>{{ file.category }}</td>
+                                        <td>{{ file.author }}</td>
+                                        <td>{{ file.addedAt ? file.addedAt|date('d/m/Y à H:i:s') : '' }}</td>
+                                        <td><span class="{{activeBadge}}">{{ file.isActive ? 'Oui' : 'Non' }}</span></td>
+										<td>
+											<a title="Mettre à jour" class="btn" href="{{ path('app_file_edit', {'id': file.id}) }}">
+												<i class="mdi mdi-lead-pencil"></i>
+											</a>
+										</td>
+										<td>
+											{% if file.isActive %}
+                                                {{ include('file/_desactivate_form.html.twig') }}
+                                            {% else %}
+                                                {{ include('file/_activate_form.html.twig') }}
+                                            {% endif %}
+										</td>
+										<td>
+											 {{ include('file/_delete_form.html.twig') }}
+										</td>
+									</tr>
+								{% else %}
+									<tr>
+										<td colspan="14">Aucun fichier trouvé</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table> <br>
+						<div class="d-flex justify-content-center">
+							{% do files.setPageRange(2) %}
+							{{ knp_pagination_render(files, 'partials/_pagination.html.twig') }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{# {% extends 'backend_base.html.twig' %}
+
+{% block title %}File index{% endblock %}
+
+{% block body %}
+    <h1>File index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>FileName</th>
+                <th>FullName</th>
+                <th>AcademicYear</th>
+                <th>AddedAt</th>
+                <th>University</th>
+                <th>School</th>
+                <th>Field</th>
+                <th>Category</th>
+                <th>Author</th>
+                <th>IsActive</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for file in files %}
+            <tr>
+                <td>{{ file.id }}</td>
+                <td>{{ file.fileName }}</td>
+                <td>{{ file.FullName }}</td>
+                <td>{{ file.AcademicYear }}</td>
+                <td>{{ file.addedAt ? file.addedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ file.university }}</td>
+                <td>{{ file.school }}</td>
+                <td>{{ file.field }}</td>
+                <td>{{ file.category }}</td>
+                <td>{{ file.author }}</td>
+                <td>{{ file.isActive ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_file_show', {'id': file.id}) }}">show</a>
+                    <a href="{{ path('app_file_edit', {'id': file.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="12">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_file_new') }}">Create new</a>
+{% endblock %} #}

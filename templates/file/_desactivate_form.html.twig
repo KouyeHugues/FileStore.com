@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('app_file_desactivate', {'id': file.id}) }}" onsubmit="return confirm('Voulez vous désactiver ce concours ?');">
+    <input type="hidden" name="_token" value="{{ csrf_token('desactivate' ~ file.id) }}">
+    <button title="Désactiver pour ne pas le rendre public" class="btn badge badge-warning">Désactiver</button>
+</form>

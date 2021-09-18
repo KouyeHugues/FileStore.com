@@ -1,0 +1,151 @@
+{% extends "base.html.twig" %}
+
+{# Page Meta title #}
+{% set title = " Les fichiers" %}
+{% set description = "La liste des fichiers" %}
+{% set keywords = " Bénin, epreuves, pdf, université, école, filière"%}
+
+{# Page Meta title #}
+{% block title %}
+	{{title}}
+{% endblock %}
+{% block fb_title %}
+	{{title}}
+{% endblock %}
+{% block twitter_title %}
+	{{title}}
+{% endblock %}
+
+{# Page Body class #}
+{% block body_class %}{% endblock %}
+
+{# Page meta informations #}
+{% block descriptions %}
+	{{description}}
+{% endblock %}
+{% block schema_description %}
+	{{description}}
+{% endblock %}
+{% block twitter_description %}
+	{{description}}
+{% endblock %}
+{% block open_graph_description %}
+	{{description}}
+{% endblock %}
+{% block keywords %}
+	{{keywords}}
+{% endblock %}
+
+{% block og_image %}
+	
+{% endblock %}
+
+{% block stylesheets %}
+	{{ parent() }}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="{{asset('themes/front/css/styles.css')}}" rel="stylesheet" />
+    <link rel="stylesheet" href="{{asset('themes/back/vendors/feather/feather.css')}}">
+	<link rel="stylesheet" href="{{asset('themes/back/vendors/ti-icons/css/themify-icons.css')}}">
+	<link rel="stylesheet" href="{{asset('themes/back/vendors/css/vendor.bundle.base.css')}}">
+	<link rel="stylesheet" href="{{asset('themes/back/vendors/datatables.net-bs4/dataTables.bootstrap4.css')}}">
+	<link rel="stylesheet" href="{{asset('themes/back/vendors/ti-icons/css/themify-icons.css')}}">
+	<link rel="stylesheet" href="{{asset('themes/back/js/select.dataTables.min.css')}}">
+	<link rel="stylesheet" href="{{asset('themes/back/css/vertical-layout-light/style.css')}}">
+	<link rel="stylesheet" href="{{asset('themes/back/vendors/mdi/css/materialdesignicons.min.css')}}"/>
+	<link rel="icon" type="image/x-icon" href="{{ asset('img/logo.jpg')}}"/>
+{% endblock %}
+{% block body %}
+	{% include "partials/_navbar_front.html.twig" %}
+    {% block header %}
+		<!-- Header-->
+        <header class="bg-dark py-5">
+            <div class="container px-4 px-lg-5 my-5">
+                <div class="text-center text-white">
+                    <h1 class="display-4 fw-bolder mb-3"> Recueil des épreuves d'examen, de devoir et concours des universités nationales du Bénin</h1>
+                    <p class="lead fw-normal text-white-50 mb-5">Retrouver sur la plateforme les épreuves de coucours, d'examen et de devoir des différentes écoles des universités du Bénin</p>
+							{{ form(form) }}
+	
+                </div>
+            </div>
+        </header>
+	{% endblock %}
+	<!-- Section-->
+    {% block content %}
+    <section class="py-5 my-5">
+    <div class="row">
+		<div class="col-lg-12 grid-margin stretch-card m">
+			<div class="card">
+				<div class="card-body text-center">
+					<h4 class="card-title">Les différents fichiers disponibles sur le site</h4>
+					<p class="card-description">
+						Table de tous les fichiers disponibles. &nbsp;
+					</p>
+					<div class="table-responsive" >
+						<table class="table table-bordered">
+							<thead>
+								<tr>
+                                    <th>Nom</th>
+                                    <th>Année</th>
+                                    <th>Université</th>
+                                    <th>Ecole</th>
+                                    <th>Domaine</th>
+                                    <th>Catégorie</th>
+                                    <th>Auteur</th>
+                                    <th>Date d'ajout</th>
+                                    <th>Fichier</th>
+				    			</tr>
+							</thead>
+							<tbody>
+								{% for file in files %}
+                                    <tr>
+                                         <td>{{ file.FullName }}</td>
+                                        <td>{{ file.AcademicYear }}</td>
+                                        <td>{{ file.university }}</td>
+                                        <td>{{ file.school }}</td>
+                                        <td>{{ file.field }}</td>
+                                        <td>{{ file.category }}</td>
+                                        <td>{{ file.author }}</td>
+                                        <td>{{ file.addedAt ? file.addedAt|date('d/m/Y') : '' }}</td>
+										<td>
+                                             <a class="badge badge-primary" href="{{ asset("uploads/pdf/" ~ file.fileName) }}">Télécharger(PDF)</a>
+                                        </td>
+									</tr>
+								{% else %}
+									<tr>
+										<td colspan="9">Aucun fichier trouvé</td>
+									</tr>
+								{% endfor %}
+							</tbody>
+						</table> <br>
+						{# <div class="d-flex justify-content-center">
+							{% do files.setPageRange(2) %}
+							{{ knp_pagination_render(files, 'partials/_pagination.html.twig') }}
+						</div> #}
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+    </section>
+                {% endblock %}
+    <!-- Footer-->  
+	{% include "partials/_footer_front.html.twig" %}
+
+{% endblock %}
+{% block javascripts %}
+	{{ parent() }}
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{asset('themes/front/js/scripts.js')}}"></script>
+    <script src="{{asset('themes/back/vendors/js/vendor.bundle.base.js')}}"></script>
+	<script src="{{asset('themes/back/vendors/chart.js/Chart.min.jss')}}"></script>
+	<script src="{{asset('themes/back/vendors/datatables.net/jquery.dataTables.js')}}"></script>
+	<script src="{{asset('themes/back/vendors/datatables.net-bs4/dataTables.bootstrap4.js')}}"></script>
+	<script src="{{asset('themes/back/js/dataTables.select.min.js')}}"></script>
+	<script src="{{asset('themes/back/js/off-canvas.js')}}"></script>
+	<script src="{{asset('themes/back/js/hoverable-collapse.js')}}"></script>
+	<script src="{{asset('themes/back/js/template.js')}}"></script>
+	<script src="{{asset('themes/back/js/dashboard.js')}}"></script>
+	<script src="{{asset('themes/back/js/Chart.roundedBarCharts.js')}}"></script>
+{% endblock %}
